@@ -17,6 +17,15 @@
             @endif
 
             {{ __('You are logged in!') }}
+
+            <div class="card mt-4">
+                <div class="card-header">
+                    Scan the QR Code with your Authenticator App
+                </div>
+                <div class="card-body text-center">
+                    <img src="{{ $qrCode }}" alt="QR Code">
+                </div>
+            </div>
         </div>
     </section>
 </div>
