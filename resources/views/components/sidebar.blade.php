@@ -8,9 +8,14 @@
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header">Dashboard</li>
-            <li class="nav-item dropdown active">
-                <a href="/" class="nav-link">
+            <li class="nav-item dropdown {{ request()->is('home') ? 'active' : '' }}">
+                <a href="/home" class="nav-link">
                     <i class="fas fa-fire"></i><span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item dropdown {{ request()->is('2fa') ? 'active' : '' }}">
+                <a href="/2fa" class="nav-link">
+                    <i class="fas fa-key"></i><span>Verification</span>
                 </a>
             </li>
         </ul>
