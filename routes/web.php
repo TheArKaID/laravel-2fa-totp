@@ -9,3 +9,4 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/2fa', [App\Http\Controllers\HomeController::class, 'verification'])->name('2fa.verification');

@@ -73,4 +73,14 @@ class HomeController extends Controller
 
         return $dataUri;
     }
+
+    /**
+     * Show the verification page.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function verification()
+    {
+        return view('verification');
+    }
 }
