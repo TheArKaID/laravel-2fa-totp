@@ -7,6 +7,7 @@ use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PragmaRX\Google2FA\Google2FA;
 
@@ -28,6 +29,10 @@ class HomeController extends Controller
      */
     public function index()
     {
+        if (!Auth::check() && session()->has('twofa:user:id')) {
+            return redirect()->route('2fa.verification');
+        }
+
         $this->middleware('auth');
 
         $user = User::find(Auth::id()); // Just to call update() method later
@@ -82,5 +87,37 @@ class HomeController extends Controller
     public function verification()
     {
         return view('verification');
+    }
+
+    /**
+     * Verify the 2FA code.
+     * 
+     * @param \Illuminate\Http\Request $request
+     * 
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function verify(Request $request)
+    {
+        if (!$twofa = $request->session()->get('twofa:user:id', true)) {
+            return redirect()->route('login');
+        }
+
+        $request->validate([
+            'otp' => 'required|string',
+        ]);
+
+        $user = User::find($twofa);
+
+        if ($this->google2fa->verifyKey(decrypt($user->twofa_secret), $request->otp)) {
+            Auth::login($user);
+
+            $request->session()->forget('twofa:user:id');
+
+            return redirect()->route('home');
+        }
+
+        return redirect()->route('2fa.verification')->withErrors([
+            'otp' => 'Invalid 2FA code.'
+        ]);
     }
 }

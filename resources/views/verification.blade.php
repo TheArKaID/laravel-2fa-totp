@@ -23,7 +23,7 @@
                     Verify OTP
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="">
+                    <form method="POST" action="{{ route('2fa.verify') }}">
                         @csrf
                         <div class="form-group">
                             <label for="otp">One-Time Password</label>
